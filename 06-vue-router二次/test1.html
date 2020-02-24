@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+  </head>
+  <body>
+    <div id="app">
+        <h1>{{message}}</h1>
+        <router-link to="/home">home</router-link>
+        <router-view ></router-view>
+    </div>
+
+    <template id="home">
+      <div>
+        <h1>Home Page</h1>
+        <router-link to="/home/category">category</router-link>
+        <router-link to="/home/cart">cart</router-link>
+
+        <router-view></router-view>
+      </div>
+    </template>
+
+    <template id="category">
+      <div>
+        <h1>Category Page</h1>
+      </div>
+    </template>
+
+    <template id="cart">
+      <div>
+        <h1>Cart Page</h1>
+      </div>
+    </template>
+
+      <script src="../js/vue.js"></script>
+      <script src="../js/vue-router.js"></script>
+    <script>
+        const home =  {
+          template : '#home',
+        }
+
+        const category = {
+          template : '#category'
+        }
+
+        const cart= {
+          template : '#cart'
+        }
+
+        const router = new VueRouter ({
+          routes : [
+            {path:'/home',
+            component : home,
+            children : [
+              { name: 'category',
+               path:'category',
+               component:category,},
+
+               { name: 'cart',
+               path:'cart',
+               component:cart,},
+            ]},
+
+          ]
+        })
+
+        const app = new Vue({
+          el: '#app',
+          data: {
+            message:'hello'
+          },
+          methods: {},
+          router,
+        });
+    </script>
+
+  </body>
+</html>

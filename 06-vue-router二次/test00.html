@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial';
+    }
+
+    [v-cloak] {
+      display: none;
+    }
+
+    .tab {
+      margin: 0 auto;
+      width: 450px;
+      position: relative;
+      /*overflow: hidden;*/
+    }
+
+    .tab ul {
+      display: flex;
+      margin-bottom: 5px;
+    }
+
+    .tab ul li {
+      flex: 1;
+      float: left;
+      height: 45px;
+      list-style: none;
+      text-align: center;
+      border-top: 1px solid #eee;
+      color: rgba(174, 175, 164, 0.71);
+    }
+
+    .tab ul li div {
+      margin-top: 5px;
+      height: 30px;
+      line-height: 30px;
+      border-right: 1px solid #eee;
+      cursor: pointer;
+    }
+
+    .tab ul li:hover {
+      background-color: rgba(246, 246, 246, 0.42);
+    }
+
+    .tab ul li:last-child div {
+      border-right: none;
+    }
+
+    /*-----------------------------------------------------*/
+    .tab div {
+      width: 100%;
+      overflow: hidden;
+    }
+
+
+    .tab .img-box {
+      width: 1000%;
+      display: flex;
+      height: 450px;
+
+    }
+
+    .tab .img-box li {
+      height: 300px;
+      float: left;
+      flex: 1;
+    }
+
+    .tab  .img-box img {
+      width: 450px;
+    }
+
+    .tab .active {
+      color: cadetblue;
+      background-color: rgba(246, 246, 246, 0.42);
+    }
+
+    .tab .img-box.current {
+      display: block
+    }
+
+    .v-enter {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+    .v-leave-to{
+      transform: translateX(-100%);
+    }
+
+    .v-enter-active,
+    .v-leave-active {
+      transition: all .3s ease;
+    }
+
+  </style>
+</head>
+<body>
+<div id="app" v-cloak>
+  {{message}}
+  <div class="tab">
+    <ul>
+      <li v-for="(item,index) in list" :key="item.id" :class="currentIndex == index? 'active':''" >
+        <div @click="changeImg(index)">{{item.name}}</div>
+      </li>
+    </ul>
+    <div>
+      <ul class="img-box">
+        <transition-group mode="out in">
+          <li  v-show="isShow" v-for="(item,index) in list" :key="item.id">
+            <img :src="item.path" alt="">
+          </li>
+        </transition-group>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue ({
+    el:'#app',
+    data:{
+      message:'Hello',
+      list:[
+        {id:1, name:'iphone5s',path:'../images/iphone-5s.jpg'},
+        {id:2, name:'iphonexs',path:'../images/iphone-xs.jpg'},
+        {id:3, name:'mac',path:'../images/macbook-pro.jpg'},
+        {id:4, name:'laptop',path:'../images/modern-laptop.jpg'}
+      ],
+      currentIndex : 0,
+      isShow : false,
+      count : 0
+    },
+    methods : {
+      changeImg(index) {
+        this.currentIndex = index;
+        this.isShow = !this.isShow
+      },
+
+      initChange () {
+        setInterval(()=>{
+          if (this.count === 4) {
+            this.count = 0
+          }
+          this.changeImg(this.count)
+          this.count ++
+        },5000)
+      }
+    },
+    // mounted(){
+    //   this.initChange()
+    // }
+  })
+</script>
+</body>
+</html>

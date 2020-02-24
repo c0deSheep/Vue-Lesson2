@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div id="app">
+  {{message}}
+</div>
+
+
+<script src="../js/vue.js"></script>
+<script>
+  const login = {
+    template : '<h1>hello Render</h1>>'
+  }
+
+  const app = new Vue ({
+    el:'#app',
+    data:{
+      message:'Hello',
+    },
+    render : function (createElement) { // createElement是一个方法,调用它,能够把指定的组件模板渲染为html结构
+      return createElement(login)
+    //  注意:这里return的结果,会替换页面中 el指定的那个容器,
+    //   这里的例子结果也就是 这个login模板会取代app!!!
+    //
+    //  这也是和component组件的最大区别
+    }
+  })
+</script>
+</body>
+</html>

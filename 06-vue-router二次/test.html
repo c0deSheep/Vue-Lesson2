@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div id="app">
+  <h1>{{message}}</h1>
+  <h2>{{from_son}}</h2>
+  <hr>
+  <cpn :get_message="to_son" @post="getToSon"></cpn>
+
+</div>
+
+<template id="cpn">
+  <div>
+    <h1>{{son_message}}</h1>
+    <h2>{{get_message}}</h2>
+    <button @click="send(to_father)">send</button>
+  </div>
+</template>
+
+<script src="../js/vue.js"></script>
+<script>
+
+
+  const app = new Vue ({
+    el:'#app',
+    data:{
+      message:'Hello',
+      to_son : 'father to son',
+      from_son : ''
+    },
+    components : {
+      cpn:{
+        template:'#cpn',
+        props:{
+          get_message : {
+            type:String,
+            default:''
+          }
+        },
+        data () {
+          return {
+            son_message : 'i am son',
+            to_father: 'son to father'
+          }
+        },
+        methods:{
+          send (data) {
+            this.$emit('post',data)
+          }
+        }
+      }
+    },
+    methods:{
+      getToSon (data) {
+        this.from_son = data
+      }
+    }
+  })
+</script>
+</body>
+</html>

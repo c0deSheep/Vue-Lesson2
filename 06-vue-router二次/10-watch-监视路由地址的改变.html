@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div id="app">
+  {{message}}
+
+  <router-link to="/login">login</router-link>
+  <router-link to="/register">register</router-link>
+
+  <router-view></router-view>
+</div>
+
+<template id="login">
+  <h1>Login Page</h1>
+</template>
+
+<template id="register">
+  <h1>Register Page</h1>
+</template>
+
+
+<script src="../js/vue.js"></script>
+<script src="../js/vue-router.js"></script>
+<script>
+  const login = {
+    template : '#login'
+  }
+
+  const register = {
+    template : '#register'
+  }
+
+  const router = new VueRouter ({
+    routes : [
+      {path:'/login',
+      component : login},
+
+      {path:'/register',
+        component : register}
+    ]
+  })
+
+  const app = new Vue ({
+    el:'#app',
+    data:{
+      message:'Hello',
+    },
+    router,
+    watch : {
+      '$route.path' : function (newValue, oldValue) {
+        console.log(newValue + '-----'+ oldValue)
+      }
+    }
+  })
+</script>
+</body>
+</html>

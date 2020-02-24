@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div id="app">
+  {{message}}
+
+  <input type="text" v-model="firstname"> +
+  <input type="text" v-model="lastname" > =
+  <input type="text" v-model="fullname">
+</div>
+
+
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue ({
+    el:'#app',
+    data:{
+      message:'Hello',
+      firstname : '',
+      lastname : '',
+      fullname : '',
+    },
+    methods:{
+
+    },
+    // watch 用于监听非DOM元素的事件，比如路由，router-view占位符
+    watch : { //使用这个属性，可以监视data中指定数据的变化，然后触发这个watch中对应的function处理函数
+      // 'firstname' : function () {this.fullname = this.firstname + '-' + this.lastname}
+      // function 里提供了两个参数：新值(newValue) ， 旧值(oldValue)
+      'firstname' : function (newValue,oldValue) {this.fullname = newValue + '-' + this.lastname},
+
+      'lastname' : function (newValue,oldValue) {this.fullname =  this.firstname+ '-' + newValue}
+    }
+  })
+</script>
+</body>
+</html>

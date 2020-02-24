@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    html,body,
+    #app {
+      height: 100%;
+      width: 100%;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    #app {
+      /*要将footer固定底部，直接整个父元素，flex布局，再纵向布局，然后中间的内容100%高度，即可*/
+      display: flex;
+      flex-direction: column;
+    }
+    .header {
+
+      background-color: #1f62ea;
+      height: 49px;
+      box-shadow: 0 -10px 10px 10px rgba(255,0,0,0.5);
+      margin-bottom: 20px;
+    }
+
+    .container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      padding-bottom:50px;/*2.padding-bottom要等于或大于footer的height值*/
+    }
+    
+    .fl {
+      flex: 2;
+      /*height: 100%;*/
+      margin-top: -20px;
+      background-color: #f1f1f1;
+      margin-right: 20px;
+    }
+
+    .fr {
+      flex: 10;
+      /*height: 100%;*/
+      background-color: #f9f9f9;
+      margin-right: 20px;
+    }
+
+    .footer {
+      background-color: #3c3c3c;
+      height: 100px;
+      width: 100%;
+      /*margin-top: -100px; !*1.将footer固定在底部的设置，margin-top为负的高度*!*/
+      clear: both;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <!--2.再使用name将其中对应，加载指定组件-->
+  <router-view name="default"></router-view>
+  <div class="container">
+    <router-view name="left"></router-view>
+    <router-view name="main"></router-view>
+  </div>
+  <router-view name="footer"></router-view>
+
+</div>
+
+<!-------------------------------->
+
+<template id="header">
+  <div class="header">
+    <h1>header</h1>
+  </div>
+</template>
+<!-------------------------------->
+<template id="leftBox">
+  <div class="fl">
+    <h1>leftBox</h1>
+  </div>
+</template>
+<!-------------------------------->
+
+<template id="mainBox">
+  <div class="fr">
+    <h1>rightBox</h1>
+  </div>
+</template>
+<!-------------------------------->
+<template id="footer">
+  <div class="footer">
+    <h1>footer</h1>
+  </div>
+</template>
+<!-------------------------------->
+
+<script src="../js/vue.js"></script>
+<script src="../js/vue-router.js"></script>
+<script>
+
+
+  const header = {
+    template : '#header'
+  }
+
+  const leftBox = {
+    template : '#leftBox'
+  }
+
+  const mainBox = {
+    template : '#mainBox'
+  }
+
+  const footer = {
+    template : '#footer'
+  }
+
+  // ----------创建路由实例---------
+    const router = new VueRouter ({
+      routes:[
+        // 0.多个component不能同时显示
+        // {
+        //   path:'/',
+        //   component:header
+        // },
+        // {
+        //   path:'/left',
+        //   component:leftBox
+        // },
+        // {
+        //   path:'/main',
+        //   component: mainBox
+        // }
+
+        // 1.但是可以使用components,在后面添加对象,key为router-view中name对应的值
+        {
+          path:'/',
+          components:{
+            default : header,
+            left : leftBox,
+            main : mainBox,
+            footer,
+          }
+        },
+      ]
+    })
+
+  // -----------------------------
+
+
+  const app = new Vue ({
+    el:'#app',
+    data:{
+      message:'Hello',
+    },
+    router
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    .second-way {
+      font-style: italic;
+      color:blue;
+    }
+
+    .v-enter,
+    .v-leave-to {
+      opacity: 0;
+      transform:translateX(40px);
+    }
+
+    .v-enter-active,
+    .v-leave-active {
+      transition:all 0.3s ease
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    {{message}}
+
+    <!--使用router-link就不需要加#-->
+    <!--2.然后对应的路径就直接设置对应的值/：id -> /1  -->
+    <router-link to="/login/1/young">登录 </router-link>
+    <router-link to="/register">注册</router-link>
+    <router-link to="/user">用户</router-link>
+
+    <transition mode="out-in">
+      <router-view></router-view>
+    </transition>
+  </div>
+
+
+
+  <template id="login">
+    <div>
+      <h1>Login Page</h1>
+      <h3>{{id}} --- {{name}}</h3>
+    </div>
+  </template>
+
+  <template id="register">
+    <div>
+      <h1>Register page</h1>
+    </div>
+  </template>
+
+
+  <template id="user">
+    <div>
+      <h1>User</h1>
+      <router-link to="/user/id1">用户id1</router-link>
+      <router-link to="/user/id2">用户id2</router-link>
+      <router-link to="/user/id3">用户id3</router-link>
+
+      <transition mode="">
+        <router-view></router-view>
+      </transition>
+    </div>
+  </template>
+
+  <template id="user-son">
+    <div>
+      <h1>User Id : {{id}}</h1>
+    </div>
+  </template>
+
+
+
+  <!--引入文件 script全局引入则不需要像webpack一样安装-->
+  <script src="../js/vue.js"></script>
+  <script src="../js/vue-router.js"></script>
+  <script>
+    // 2.5 创建组件模板对象
+    const cpn = {
+      template:'#login',
+      data(){
+        return {
+          id:'',
+          name:''
+        }
+      },
+      created() {
+        //$route就是当前活跃的路由对象
+        console.log(this.$route)
+        console.log(this.$route.params)
+        this.id = this.$route.params.id
+        this.name = this.$route.params.name
+      }
+    }
+
+    const cpn2 = {
+      template:'#register'
+    }
+
+    const cpn3 = {
+      template : '#user'
+    }
+
+    const  cpn3Son = {
+      template : '#user-son',
+      props : {
+        id : {
+          type : String,
+          default : ''
+        }
+      }
+    }
+
+
+    // 创建路由对象， 当导入 vue-router 包之后，再window全局对象中，就有了一个路由构造函数，名称为：VueRouter
+    const routerObj = new VueRouter({
+      // route //这个配置对象中的route 表示 【路由匹配规则】的意思
+      routes:[
+        // 路由匹配规则
+        // 属性1 是path 表示监听的 哪个路由链接地址
+        // 属性2 是 component，表示 如果 路由时前面匹配到的 path ，则展示component 属性对应的哪个组件,
+        {
+          name:'login',
+          // 1.使用这种/:xx 的后缀可以将参数传递到$route中的params中，如要添加多个就要在后面累加/:xx
+          path:'/login/:id/:name',
+          component:cpn,  //值必须是一个组件模板对象,不能时 组件的引用名称
+        },
+
+        {path:'/register',
+          component:cpn2,  //值必须是一个组件模板对象,不能时 组件的引用名称
+        },
+
+        {
+          path : '/user',
+          component : cpn3,
+          children : [
+            {
+              path : ':id' ,
+              component :cpn3Son,
+              props :true
+            }
+          ]
+        }
+
+      ],
+      linkActiveClass:'second-way'
+    })
+
+    // 创建Vue 实例，得到ViewModel（vm）
+    const app = new Vue ({
+      el:'#app',
+      data:{
+        message:'Hello',
+      },
+    //  将路由规则对象，注册到 vm 实例上，用来监听路由URL 地址变化，然后展示对应的组件
+      router:routerObj,
+    })
+  </script>
+</body>
+</html>

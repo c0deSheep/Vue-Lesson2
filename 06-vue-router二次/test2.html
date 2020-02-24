@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div id="app">
+  {{message}}
+  <!--<cpn ></cpn>-->
+
+  <cpn ref="key1"></cpn>
+  <h2>{{msn}}</h2>
+</div>
+
+<!--<template id="cpn">-->
+  <!--<h1>{{cpn_message}}</h1>-->
+<!--</template>-->
+
+<template id="cpn2">
+  <h1>{{son_message}}</h1>
+</template>
+
+
+<script src="../js/vue.js"></script>
+<script>
+  // Vue.component('cpn',Vue.extend({
+  //   template: '#cpn',
+  //   data () {
+  //     return {
+  //       cpn_message : 'i am cpn 全局组件'
+  //     }
+  //   }
+  // }))
+
+  const app = new Vue ({
+    el:'#app',
+    data:{
+      message:'Hello',
+      msn:''
+    },
+    components : {
+     'cpn':{
+        template:'#cpn2',
+        data(){
+          return {
+            son_message: 'i am son 局部组件'
+          }
+        }
+      }
+    },
+    mounted () {
+      // ref和$refs,至少需要在mounted挂载后才能作用，在created之前是无法操作ref和$refs
+      console.log(this.$refs.key1)
+      this.msn = this.$refs.key1.son_message
+    }
+  })
+</script>
+</body>
+</html>

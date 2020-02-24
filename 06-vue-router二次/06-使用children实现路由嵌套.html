@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <div id="app">
+    {{message}}
+
+    <router-link to="/account">Account</router-link>
+    <router-view></router-view>
+  </div>
+
+  <template id="account">
+    <div>
+      <h1>Account Page</h1>
+
+      <!--注意3 ： 在父路由模板中，路由地址需要带父路由组件的路由地址-->
+      <router-link to="/account/login">login</router-link>
+      <router-link to="/account/register">register</router-link>
+
+      <router-view></router-view>
+    </div>
+  </template>
+
+  <template id="login">
+    <div>
+      <h3>Login Page</h3>
+    </div>
+  </template>
+
+  <template id="register">
+    <div>
+      <h3>Register Page</h3>
+    </div>
+  </template>
+
+  <script src="../js/vue.js"></script>
+  <script src="../js/vue-router.js"></script>
+  <script>
+    const account = {
+      template:'#account',
+    }
+
+    const login = {
+      template:'#login',
+    }
+
+    const register = {
+      template:'#register',
+    }
+
+    const router = new VueRouter({
+      routes:[
+        {path:'/account',
+        component:account,
+          // 注意2 ： 而是将子路由写入配置中设置的children数组里
+          children: [
+            // 注意4 : 子路由的path地址不需要加/斜线
+            {path:'login',component:login},
+            {path:'register',component:register}
+          ]
+        },
+        // 注意1 ：子路由不能怎么直接写进new VueRouter中，会平级，导致进入子路由时，父路由就隐藏
+        // {path:'/account/login',component:login},
+        // {path:'/account/register',component:register}
+      ]
+    })
+
+    const app = new Vue ({
+      el:'#app',
+      data:{
+        message:'Hello',
+      },
+      router
+    })
+  </script>
+</body>
+</html>
